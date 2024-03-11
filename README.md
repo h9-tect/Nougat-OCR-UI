@@ -29,7 +29,7 @@ Usage:
 1. Upon launching the application, click the 'Select PDF' button to choose the PDF file you wish to convert.
 2. Click the 'Choose Folder' button to select the output directory for your converted files.
 3. If needed, select the 'Recompute' or 'Markdown Compatibility' options.
-4. Press the 'Run' button to start the conversion process. A message will pop up once the conversion successfully completes.
+4. Press the 'Convert now' button to start the conversion process. A message will pop up once the conversion successfully completes.
 
 Support:
 --------
