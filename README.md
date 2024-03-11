@@ -35,4 +35,4 @@ Support:
 --------
 For any queries or issues, please reach out via the Issues section of the application repository, or contact the maintainer directly.
 
-Thank you for using Fancy Nougat PDF Converter!
+Thank you for using  Nougat PDF OCR!
