@@ -1,4 +1,4 @@
-Fancy Nougat PDF Converter README
+Fancy Nougat PDF OCR README
 ---------------------------------
 
 Welcome to the Fancy Nougat PDF Converter - a desktop application to convert your PDF files with ease and style!
