@@ -18,11 +18,11 @@ To run the application, simply execute the script with Python.
 
 On Windows:
 ```bash
-python fancy_nougat_pdf_converter.py
+python Nougat.py
 ```
 On Unix/Mac:
 ```bash
-python3 fancy_nougat_pdf_converter.py
+python3 Nougat.py
 ```
 Usage:
 ------
