@@ -17,11 +17,13 @@ Running the Application:
 To run the application, simply execute the script with Python.
 
 On Windows:
+```bash
 python fancy_nougat_pdf_converter.py
-
+```
 On Unix/Mac:
+```bash
 python3 fancy_nougat_pdf_converter.py
-
+```
 Usage:
 ------
 1. Upon launching the application, click the 'Select PDF' button to choose the PDF file you wish to convert.
