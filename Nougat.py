@@ -66,11 +66,107 @@ class FancyNougatPDFConverter:
             self.output_entry.delete(0, tk.END)
             self.output_entry.insert(0, folder_path)
 
+import tkinter as tk
+from tkinter import ttk, filedialog, messagebox
+import subprocess
+import webbrowser
+import urllib.request
+import os
+import sys
+
+class NougatPDFConverter:
+    def __init__(self, root):
+        self.root = root
+        self.setup_ui()
+
+    def setup_ui(self):
+        self.root.title("Nougat PDF Converter")
+
+        if not self.is_pytorch_installed():
+            self.display_pytorch_installation_info()
+
+        frame = ttk.Frame(self.root, padding="10")
+        frame.grid(row=0, column=0, sticky=(tk.W, tk.E, tk.N, tk.S))
+
+        ttk.Label(frame, text="PDF File:").grid(row=0, column=0, sticky=tk.W)
+        self.pdf_entry = ttk.Entry(frame, width=40)
+        self.pdf_entry.grid(row=0, column=1, sticky=(tk.W, tk.E))
+        ttk.Button(frame, text="Browse", command=self.browse_pdf).grid(row=0, column=2)
+
+        ttk.Label(frame, text="Output Folder:").grid(row=1, column=0, sticky=tk.W)
+        self.output_entry = ttk.Entry(frame, width=40)
+        self.output_entry.grid(row=1, column=1, sticky=(tk.W, tk.E))
+        ttk.Button(frame, text="Browse", command=self.browse_output_folder).grid(row=1, column=2)
+
+        self.recompute_var = tk.BooleanVar()
+        self.markdown_var = tk.BooleanVar()
+
+        ttk.Checkbutton(frame, text="Recompute", variable=self.recompute_var).grid(row=2, column=0, sticky=tk.W)
+        ttk.Checkbutton(frame, text="Markdown Compatibility", variable=self.markdown_var).grid(row=2, column=1, sticky=tk.W)
+
+        ttk.Button(frame, text="Run", command=self.run_nougat).grid(row=3, columnspan=3)
+
+    def install_nougat(self):
+        try:
+            subprocess.run(["pip", "show", "nougat-ocr"], check=True, stdout=subprocess.PIPE)
+        except subprocess.CalledProcessError:
+            subprocess.run(["pip", "install", "--upgrade", "nougat-ocr"], check=True)
+
+    def open_pytorch_link(self, event=None):
+        webbrowser.open_new("https://pytorch.org/get-started/locally/")
+
+    def is_pytorch_installed(self):
+        try:
+            subprocess.run(["pip", "show", "torch"], check=True, stdout=subprocess.PIPE)
+            return True
+        except subprocess.CalledProcessError:
+            return False
+
+    def display_pytorch_installation_info(self):
+        pytorch_label = tk.Label(self.root, text="Install PyTorch to improve performance", fg="blue", cursor="hand2")
+        pytorch_label.grid(row=0, column=0, sticky=tk.W)
+        pytorch_label.bind("<Button-1>", self.open_pytorch_link)
+
+    def browse_pdf(self):
+        file_path = filedialog.askopenfilename(filetypes=[("PDF files", "*.pdf")])
+        if file_path:
+            self.pdf_entry.delete(0, tk.END)
+            self.pdf_entry.insert(0, file_path)
+
+    def browse_output_folder(self):
+        folder_path = filedialog.askdirectory()
+        if folder_path:
+            self.output_entry.delete(0, tk.END)
+            self.output_entry.insert(0, folder_path)
+
     def run_nougat(self):
         pdf_path = self.pdf_entry.get().strip()
         output_dir = self.output_entry.get().strip()
-        # Here you should implement the logic to call your conversion function or script
-        messagebox.showinfo("Info", "This is where the PDF conversion process would take place.")
+
+        if not pdf_path:
+            messagebox.showwarning("Warning", "Please select a PDF file.")
+            return
+
+        if not output_dir:
+            output_dir = "."
+
+        cmd = ["nougat", pdf_path, "-o", output_dir]
+        if self.recompute_var.get():
+            cmd.append("--recompute")
+        if self.markdown_var.get():
+            cmd.append("--markdown")
+
+        try:
+            subprocess.run(cmd, check=True, capture_output=True)
+            messagebox.showinfo("Success", "PDF conversion completed successfully.")
+        except subprocess.CalledProcessError as e:
+            messagebox.showerror("Error", f"Failed to convert PDF: {e.stderr.decode('utf-8')}")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = NougatPDFConverter(root)
+    app.install_nougat()  # Ensure Nougat is installed at the start
+    root.mainloop()
 
 if __name__ == "__main__":
     root = tk.Tk()
